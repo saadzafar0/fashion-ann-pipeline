@@ -17,7 +17,8 @@ def load_params() -> dict:
 
 
 def normalize(images: np.ndarray) -> np.ndarray:
-    return (images.astype("float32") - 127.5) / 127.5
+    centered = (images.astype("float32") - 127.5) / 127.5
+    return np.clip(centered, -1.0, 1.0) * 0.99
 
 
 def main() -> None:

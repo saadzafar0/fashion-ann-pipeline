@@ -1,7 +1,10 @@
 from pathlib import Path
+import os
 
 import pandas as pd
 import numpy as np
+
+os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
 import tensorflow as tf
 import yaml
 
@@ -39,6 +42,7 @@ def build_model(params: dict) -> tf.keras.Model:
 
 def main() -> None:
     params = load_params()
+    tf.keras.utils.set_random_seed(params["seed"])
     MODELS_DIR.mkdir(parents=True, exist_ok=True)
 
     data = np.load(PROCESSED_FILE)
@@ -49,6 +53,7 @@ def main() -> None:
         validation_data=(data["x_val"], data["y_val"]),
         epochs=params["epochs"],
         batch_size=params["batch_size"],
+        verbose=2,
     )
 
     model.save(MODEL_FILE)

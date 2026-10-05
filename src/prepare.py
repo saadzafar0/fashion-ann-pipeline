@@ -1,6 +1,9 @@
 from pathlib import Path
+import os
 
 import numpy as np
+
+os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
 from tensorflow.keras.datasets import fashion_mnist
 
 

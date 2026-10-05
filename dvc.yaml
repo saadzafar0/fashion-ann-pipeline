@@ -23,6 +23,7 @@ stages:
       - src/train.py
       - data/processed
     params:
+      - train.seed
       - train.dense_units
       - train.dropout_rate
       - train.learning_rate

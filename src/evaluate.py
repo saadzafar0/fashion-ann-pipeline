@@ -1,6 +1,8 @@
 import json
+import os
 from pathlib import Path
 
+os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf

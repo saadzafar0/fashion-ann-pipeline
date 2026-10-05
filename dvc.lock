@@ -1,0 +1,100 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+    - path: src/prepare.py
+      hash: md5
+      md5: f3e16ad43116680ff82e57e9bae0726c
+      size: 690
+      isexec: true
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: 60a738197e081ac30a6544608dd85be3.dir
+      size: 30869925
+      nfiles: 1
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 60a738197e081ac30a6544608dd85be3.dir
+      size: 30869925
+      nfiles: 1
+    - path: src/preprocess.py
+      hash: md5
+      md5: 593da6a27e734a33e91b04376df117b4
+      size: 1370
+      isexec: true
+    params:
+      params.yaml:
+        preprocess.seed: 42
+        preprocess.validation_size: 0.1
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: 789ee9fbb1b4913de3fe1fcd4f067021.dir
+      size: 45395143
+      nfiles: 1
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: 789ee9fbb1b4913de3fe1fcd4f067021.dir
+      size: 45395143
+      nfiles: 1
+    - path: src/train.py
+      hash: md5
+      md5: da35ac5b6fb36d01a147da3eab11b6f1
+      size: 1816
+      isexec: true
+    params:
+      params.yaml:
+        train.batch_size: 128
+        train.dense_units: 256
+        train.dropout_rate: 0.2
+        train.epochs: 8
+        train.learning_rate: 0.001
+        train.seed: 42
+    outs:
+    - path: models/history.csv
+      hash: md5
+      md5: 20b3d6cf4e888eda905b6f3c8b2bdeca
+      size: 647
+      isexec: true
+    - path: models/model.h5
+      hash: md5
+      md5: b2cac0d8e5e8fd03980e45db230fa7fe
+      size: 2466904
+      isexec: true
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: 789ee9fbb1b4913de3fe1fcd4f067021.dir
+      size: 45395143
+      nfiles: 1
+    - path: models/model.h5
+      hash: md5
+      md5: b2cac0d8e5e8fd03980e45db230fa7fe
+      size: 2466904
+      isexec: true
+    - path: src/evaluate.py
+      hash: md5
+      md5: 32d6084f676f3495884ec667581cb4e3
+      size: 1840
+      isexec: true
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: a332ef9f3c7a97a728ca7b091d0a2886
+      size: 77
+      isexec: true
+    - path: models/confusion_matrix.png
+      hash: md5
+      md5: ea9cc1ff8a0f423f1e55c2fd3736921e
+      size: 112735
+      isexec: true

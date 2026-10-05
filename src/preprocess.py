@@ -17,7 +17,7 @@ def load_params() -> dict:
 
 
 def normalize(images: np.ndarray) -> np.ndarray:
-    return images.astype("float32") / 255.0
+    return (images.astype("float32") / 255.0) * 0.99
 
 
 def main() -> None:
